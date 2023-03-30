@@ -1,0 +1,69 @@
+﻿@model EventsApp.Models.Event
+
+<br />
+
+<div class="bg-black">
+
+    <div class="ag-courses_item">
+        <a class="ag-courses-item_link">
+            <div class="ag-courses-item_bg"></div>
+            <div class="ag-courses-item_date-box">
+                Title :
+                <span class="ag-courses-item_date">
+                    @Model.Title
+                </span>
+
+            </div>
+
+            <div class="ag-courses-item_date-box">
+                Description :
+                <span class="ag-courses-item_date">
+                    @Model.Content
+                </span>
+
+            </div>
+            <div class="ag-courses-item_date-box">
+                Start of the event :
+                <span class="ag-courses-item_date">
+                    @Model.StartDate
+                </span>
+
+            </div>
+
+            <div class="ag-courses-item_date-box">
+                End of the event :
+                <span class="ag-courses-item_date">
+                    @Model.EndDate
+                </span>
+
+            </div>
+            <div class="ag-courses-item_date-box">
+                Tags :
+                <span class="ag-courses-item_date">
+                    #@Model.Tag.TagName
+
+                </span>
+            </div>
+
+            <a href="@Model.Link" class="ag-courses-item_date">Visit The Event Website!</a>
+
+        </a>
+    </div>
+
+        <div class="d-flex flex-row justify-content-between p-3  ">
+
+            <a class="btn btn-warning" href="/Events/Edit/@Model.Id">Edit Event</a>
+
+            <form method="post" action="/Events/Delete/@Model.Id">
+
+                <button class="btn btn-danger" type="submit">Delete Event</button>
+
+            </form>
+
+        </div>
+
+</div>
+
+<br />
+<br />
+

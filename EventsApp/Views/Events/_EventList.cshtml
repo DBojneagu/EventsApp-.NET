@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Event>
+@* here we just show all the events that we have into our model, that was already filtered before it came here.*@
+@foreach (var @ev in Model)
+{
+    <div class="ag-courses_item"  >
+        <a class="ag-courses-item_link">
+            <div class="ag-courses-item_bg" ></div>
+            <div class="ag-courses-item_date-box">
+                Title :
+                <span class="ag-courses-item_date">
+                    @ev.Title
+                </span>
+
+            </div>
+
+            <div class="ag-courses-item_date-box">
+                Description : 
+                <span class="ag-courses-item_date">
+                    @ev.Content
+                </span>
+
+            </div>
+            <div class="ag-courses-item_date-box">
+                Start of the event : 
+                <span class="ag-courses-item_date">
+                    @ev.StartDate
+                </span>
+
+            </div>
+
+            <div class="ag-courses-item_date-box">
+                End of the event : 
+                <span class="ag-courses-item_date">
+                    @ev.EndDate
+                </span>
+
+            </div>
+            <div class="ag-courses-item_date-box">
+                Tags :
+                <span class="ag-courses-item_date">
+                    #@ev.Tag.TagName
+
+                </span>
+            </div>
+  
+                <a href="@ev.Link" class="ag-courses-item_date m">Visit The Event Website!</a>
+            <a class="btn btn-warning m-2" href="/Events/Show/@ev.Id">Show Event</a>
+        </a>
+
+    </div>
+
+        }
+

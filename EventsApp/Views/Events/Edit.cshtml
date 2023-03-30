@@ -1,0 +1,79 @@
+﻿@model EventsApp.Models.Event
+
+<h2 class="text-center mt-5 text-white">Editare articol</h2>
+<br />
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-3 text-white">
+            @using (Html.BeginForm(actionName: "Edit", controllerName: "Events",
+            method: FormMethod.Post,
+            routeValues: new { id = Model.Id }))
+            {
+
+                @* This HTML BeginForm Helper just automatically binds the value inside the textbox so that it matches the name of the
+            attribute in our model, for example :
+            *@
+                @Html.Label("Title", "Event Title")
+                <br />
+                @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @*here, we must type exactly how it is named
+            into our database, if we typed "title", it would work, we need to type it perfectly so it knows how to automatically
+            bind it to that attribute. It remains the same for the textboxes below and in other views like Edit. The difference betwen 
+            this and new is that here we use Editor and EditorFor not Textbox directly.
+            *@
+                @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+                <br />
+
+                <br />
+
+                @Html.Label("Content", "Event Description")
+                <br />
+                @Html.Editor("Content", new { htmlAttributes = new { @class = "form-control" } })
+
+                @Html.ValidationMessageFor(m => m.Content, null, new { @class = "text-danger" })
+                <br />
+
+                <br />
+
+                <br />
+
+                <label>Select a tag</label>
+                @Html.DropDownListFor(m => m.TagId, new SelectList(Model.AllTags, "Value", "Text"),
+            "Selectati Tagul", new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(m => m.TagId, null, new { @class = "text-danger" })
+                <br />
+
+                <br />
+
+                @Html.Label("StartDate", "Start Date")
+                <br />
+                @Html.TextBox("StartDate", null, new { @class = "form-control", @type = "date" })
+                <br />
+                @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
+                <br />
+
+                <br />
+
+                @Html.Label("EndDate", "End Date")
+                <br />
+                @Html.TextBox("EndDate", null, new { @class = "form-control", @type = "date" })
+                <br />
+                @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
+                <br />
+
+                @Html.Label("Link", "Link to the event")
+                <br />
+                @Html.TextBoxFor(m => m.Link, new { @class = "form-control" })
+                <br />
+                @Html.ValidationMessageFor(m => m.Link, null, new { @class = "text-danger" })
+
+                <button class="btn btn-success" type="submit">Edit event</button>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+

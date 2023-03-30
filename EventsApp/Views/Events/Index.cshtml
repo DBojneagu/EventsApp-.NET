@@ -1,0 +1,105 @@
+﻿@* If you want to change the CSS you need to go into the Shared _Layout page, i've explained it there.*@
+@{
+    var events = ViewBag.Events as IEnumerable<Event>;
+    var currentPage = 1;
+    var pageSize = 5;
+}
+@* Check if we have any messages passed before entering this function, like in our edit,new,or delete method.*@
+@if (ViewBag.Message != null)
+{
+    <h2 class="alert-warning p-3 rounded-3 text-center mb-5">@ViewBag.Message</h2>
+}
+
+@* the search bar*@
+
+<div class="form mb-5" style="max-width: 500px; margin: 0 auto;">
+    <i class="fa fa-search"></i>
+    <input type="text" id="search" class="form-control form-input" placeholder="Search anything...">
+    <div class="input-group-append">
+        <span id="searchError" style="display:none;color:red;">Please enter a search keyword</span>
+        <button id="searchBtn" class="btn btn-warning mt-2" type="button">Search</button>
+    </div>
+</div>
+@*the search bar*@
+
+@*the events list*@
+<div class="ag-format-container">
+    <div class="ag-courses_box ">
+<div id="eventList">
+    @Html.Partial("_EventList", events)
+</div>
+    </div>
+</div>
+@*the events list*@
+
+<button id="loadMoreBtn" class="btn btn-warning text-center" data-page="@currentPage">Load More</button>
+@*load more button above*@
+
+
+@*Here in this section of scripts we have 2 ( 3 actually but the 3rd it's just for the error on not giving input into the search
+    bar
+    So, here, the first script listents to the searchBtn tag above, and when we click it (.on("click")),
+    it resets the page counter, so we know that this is the first page that we show (we use the page counter so skip some events when
+    we press the load more button, after that, we get the value inside the text box and if it is nothing, we show the search error,and we return
+    if it is not null, we start the AJAX and we specify the type of action, which is GET, because we want to get something from the database
+    and we give it the route to execute, which in our case is in our controller events and our method results, so we give it Events/Results",
+    the data parameter is the data we give to the functions, so in our case we give it the search string so we can filter the events
+    by that string,if the functions succeeds, we comeback and attach the results to our list of events, we hide the search error and
+    we show the load more button ")
+*@
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var page = 1;
+            $('#searchBtn').on("click", function () {
+                page = 1; 
+                var search = $('#search').val();
+                if (search === "") {
+                    $('#searchError').show();
+                    return;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "/Events/Results",
+                    data: { search: search },
+                    success: function (result) {
+                        $('#eventList').html(result);
+                        $('#searchError').hide()
+                        $("#loadMoreBtn").show(); 
+                    }
+                });
+            });
+
+            $("#loadMoreBtn").on("click", function () { // start when we click the button 
+                page++; // increment the page number so we know how many to skip
+                $.ajax({
+                    url: "/Events/LoadMore?page=" + page + "&search=" + $("#search").val(), // thej route with 2 paramets, page and search string
+                    type: "GET", // the type of action
+                    success: function (data) {
+                        if (data.trim().length < 5) { // if we don't have more than 5 elements that we comeback with
+                            $("#loadMoreBtn").hide(); // we hide t he loadmore button 
+                            $("#eventList").append(data); // we append the new data
+                        } else {
+                            $("#eventList").append(data); // if we still have 5 or more, we still can click load more so we do not hide it
+                        }
+                    },
+                    error: function () {
+                        $("#loadMoreBtn").hide(); // if we get an error we hide the button
+                    }
+                });
+            });
+        });
+         // simple script for listening to the search button and if the input is null we show a tag that was initially hidden
+        $(document).ready(function () {
+            $('#searchBtn').on('click', function (event) {
+                var searchInput = $('#searchInput').val();
+                if (searchInput.trim() === '') {
+                    event.preventDefault();
+                    $('#searchError').show();
+                }
+            });
+        });
+    </script>
+}
+
+
